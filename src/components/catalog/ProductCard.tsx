@@ -85,19 +85,19 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </dl>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <div>
+        <div className="mt-auto flex flex-col gap-2.5 pt-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
             <span className="block text-[11px] text-muted">Опт. цена</span>
-            <span className="font-display text-lg font-bold">
+            <span className="font-display text-base font-bold leading-tight sm:text-lg">
               {formatPrice(product.price)}
             </span>
           </div>
           <Link
             href={`/product/${product.slug}`}
-            className="btn btn-outline btn-md text-[13px]"
+            className="btn btn-outline btn-md w-full justify-center whitespace-nowrap px-3 text-[13px] sm:w-auto"
           >
             Подробнее
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 shrink-0" />
           </Link>
         </div>
       </div>
