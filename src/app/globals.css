@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(22, 20, 15, 0.04) 1px, transparent 0);
+    background-size: 22px 22px;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #16140f;
+    color: #f6f3ec;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
+
+  /* Тонкий скроллбар */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cfc8b8;
+    border-radius: 999px;
+    border: 2px solid #f6f3ec;
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold
+           transition-all duration-200 focus:outline-none focus-visible:ring-2
+           focus-visible:ring-ink/40 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-lg {
+    @apply px-7 py-3.5 text-[15px];
+  }
+  .btn-md {
+    @apply px-5 py-2.5;
+  }
+  .btn-primary {
+    @apply bg-ink text-paper hover:bg-signal hover:text-white;
+  }
+  .btn-signal {
+    @apply bg-signal text-white hover:brightness-95;
+  }
+  .btn-outline {
+    @apply border border-ink/20 bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-paper;
+  }
+  .btn-ghost {
+    @apply text-ink hover:bg-ink/5;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-panel
+           px-3 py-1.5 text-xs font-medium text-muted transition-colors;
+  }
+  .chip-active {
+    @apply border-ink bg-ink text-paper;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink
+           placeholder:text-muted/60 transition-colors
+           focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/10;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-panel;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-signal;
+  }
+
+  /* Маркер «полосы» — индустриальный акцент */
+  .tape {
+    background-image: repeating-linear-gradient(
+      45deg,
+      #16140f 0 10px,
+      transparent 10px 20px
+    );
+  }
+}
