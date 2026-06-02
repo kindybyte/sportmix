@@ -38,6 +38,7 @@ export function Footer({ settings }: { settings: Settings | null }) {
           </h4>
           <ul className="space-y-2.5 text-sm text-paper/80">
             <li><Link href="/catalog" className="hover:text-signal">Каталог</Link></li>
+            <li><Link href="/production" className="hover:text-signal">Производство</Link></li>
             <li><Link href="/about" className="hover:text-signal">О нас</Link></li>
             <li><Link href="/how-to-order" className="hover:text-signal">Как заказать</Link></li>
             <li><Link href="/contacts" className="hover:text-signal">Контакты</Link></li>

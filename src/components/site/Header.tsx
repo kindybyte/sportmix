@@ -15,6 +15,7 @@ import { cn, whatsappLink } from "@/lib/utils";
 
 const NAV = [
   { href: "/catalog", label: "Каталог" },
+  { href: "/production", label: "Производство" },
   { href: "/about", label: "О нас" },
   { href: "/how-to-order", label: "Как заказать" },
   { href: "/contacts", label: "Контакты" },

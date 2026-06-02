@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getCategories, getNewProducts, getSettings } from "@/lib/queries";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
+import { TrustBlock } from "@/components/site/TrustBlock";
+import { PriceFormSection } from "@/components/site/PriceFormSection";
 import {
   ArrowRight,
   TelegramIcon,
@@ -108,10 +110,6 @@ export default async function HomePage() {
                   ))}
                 </ul>
               </div>
-            </div>
-            <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border border-line bg-panel px-5 py-4 shadow-card sm:block">
-              <span className="block text-xs text-muted">Минимальная партия</span>
-              <span className="font-display text-xl font-bold">от 10–30 шт</span>
             </div>
           </div>
         </div>
@@ -228,6 +226,12 @@ export default async function HomePage() {
           </ol>
         </div>
       </section>
+
+      {/* ─────────── БЛОК ДОВЕРИЯ + ОТЗЫВЫ ─────────── */}
+      <TrustBlock />
+
+      {/* ─────────── ФОРМА: ПОЛУЧИТЬ ОПТОВЫЙ ПРАЙС ─────────── */}
+      <PriceFormSection />
 
       {/* ─────────── КОНТАКТЫ CTA ─────────── */}
       <section className="container-px py-16 lg:py-24">
