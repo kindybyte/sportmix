@@ -209,7 +209,77 @@ export async function saveSettingsAction(formData: FormData) {
     delivery_text: str(formData.get("delivery_text")),
     about_text: str(formData.get("about_text")),
     logo_url: str(formData.get("logo_url")),
+    experience_text: str(formData.get("experience_text")),
   };
   await sb.from("settings").upsert(payload, { onConflict: "id" });
   revalidatePath("/", "layout");
+}
+
+// ─────────────────────── PRODUCTION PHOTOS ──────────
+export async function saveProductionPhotoAction(formData: FormData) {
+  const sb = await requireAuth();
+  const id = str(formData.get("id"));
+  const section = (str(formData.get("section")) ?? "gallery") as "step" | "gallery";
+  const sort_order = parseInt(String(formData.get("sort_order") ?? "0"), 10) || 0;
+  const payload = {
+    section,
+    title: str(formData.get("title")),
+    description: str(formData.get("description")),
+    image_url: str(formData.get("image_url")),
+    sort_order,
+    is_visible: formData.get("is_visible") === "on",
+  };
+  if (id) {
+    await sb.from("production_photos").update(payload).eq("id", id);
+  } else {
+    await sb.from("production_photos").insert(payload);
+  }
+  revalidatePath("/admin/production");
+  revalidatePath("/production");
+}
+
+export async function deleteProductionPhotoAction(formData: FormData) {
+  const sb = await requireAuth();
+  const id = str(formData.get("id"));
+  if (id) {
+    await sb.from("production_photos").delete().eq("id", id);
+    revalidatePath("/admin/production");
+    revalidatePath("/production");
+  }
+}
+
+// ─────────────────────── REVIEWS ────────────────────
+export async function saveReviewAction(formData: FormData) {
+  const sb = await requireAuth();
+  const id = str(formData.get("id"));
+  const name = str(formData.get("name"));
+  const text = str(formData.get("text"));
+  if (!name || !text) throw new Error("Укажите имя и текст отзыва");
+  const ratingRaw = parseInt(String(formData.get("rating") ?? "5"), 10);
+  const rating = Math.min(5, Math.max(1, Number.isNaN(ratingRaw) ? 5 : ratingRaw));
+  const payload = {
+    name,
+    city: str(formData.get("city")),
+    text,
+    rating,
+    sort_order: parseInt(String(formData.get("sort_order") ?? "0"), 10) || 0,
+    is_visible: formData.get("is_visible") === "on",
+  };
+  if (id) {
+    await sb.from("reviews").update(payload).eq("id", id);
+  } else {
+    await sb.from("reviews").insert(payload);
+  }
+  revalidatePath("/admin/reviews");
+  revalidatePath("/");
+}
+
+export async function deleteReviewAction(formData: FormData) {
+  const sb = await requireAuth();
+  const id = str(formData.get("id"));
+  if (id) {
+    await sb.from("reviews").delete().eq("id", id);
+    revalidatePath("/admin/reviews");
+    revalidatePath("/");
+  }
 }

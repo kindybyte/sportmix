@@ -12,6 +12,8 @@ const NAV = [
   { href: "/admin", label: "Обзор", exact: true },
   { href: "/admin/products", label: "Товары" },
   { href: "/admin/categories", label: "Категории" },
+  { href: "/admin/production", label: "Производство" },
+  { href: "/admin/reviews", label: "Отзывы" },
   { href: "/admin/leads", label: "Заявки" },
   { href: "/admin/settings", label: "Настройки" },
 ];

@@ -27,6 +27,11 @@ export default async function AdminSettingsPage() {
               <label className="label" htmlFor="about_text">Описание компании</label>
               <textarea id="about_text" name="about_text" rows={4} defaultValue={s?.about_text ?? ""} className="field resize-y" />
             </div>
+            <div>
+              <label className="label" htmlFor="experience_text">Опыт (для блока доверия)</label>
+              <input id="experience_text" name="experience_text" defaultValue={s?.experience_text ?? "5+ лет"} className="field" placeholder="5+ лет" />
+              <p className="mt-1 text-xs text-muted">Показывается на главной в блоке «Почему нам доверяют».</p>
+            </div>
             <LogoUploadField initialUrl={s?.logo_url ?? null} />
           </div>
         </section>

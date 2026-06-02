@@ -1,5 +1,12 @@
 import { createPublicSupabase } from "@/lib/supabase/server";
-import type { Category, Product, Settings } from "@/lib/types";
+import type {
+  Category,
+  Product,
+  ProductionPhoto,
+  ProductionSection,
+  Review,
+  Settings,
+} from "@/lib/types";
 
 const PRODUCT_SELECT = "*, category:categories(*), images:product_images(*)";
 
@@ -102,6 +109,42 @@ export async function getRelatedProducts(
     if (product.category_id) query = query.eq("category_id", product.category_id);
     const { data } = await query;
     return ((data as Product[]) ?? []).map(sortImages);
+  } catch {
+    return [];
+  }
+}
+
+export async function getProductionPhotos(
+  section?: ProductionSection
+): Promise<ProductionPhoto[]> {
+  const sb = createPublicSupabase();
+  if (!sb) return [];
+  try {
+    let query = sb
+      .from("production_photos")
+      .select("*")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+    if (section) query = query.eq("section", section);
+    const { data } = await query;
+    return (data as ProductionPhoto[]) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getReviews(): Promise<Review[]> {
+  const sb = createPublicSupabase();
+  if (!sb) return [];
+  try {
+    const { data } = await sb
+      .from("reviews")
+      .select("*")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false });
+    return (data as Review[]) ?? [];
   } catch {
     return [];
   }

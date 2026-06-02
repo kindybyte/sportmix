@@ -1,17 +1,20 @@
 import { SpoolIcon, PinIcon, ArrowRight, CheckIcon } from "@/components/ui/Icons";
+import type { Review } from "@/lib/types";
 
 /**
  * Блок доверия: опыт, производство, доставка + отзывы клиентов.
- * Тексты и отзывы можно свободно редактировать под реальные данные.
+ * Отзывы и значение «Опыт» подтягиваются из админки; пока их нет —
+ * показываются примеры по умолчанию.
  */
 
-const PILLARS = [
-  {
-    icon: CheckIcon,
-    value: "5+ лет",
-    title: "Опыт",
-    desc: "Шьём мужскую одежду оптом и знаем требования оптовых клиентов.",
-  },
+function pillars(experience: string) {
+  return [
+    {
+      icon: CheckIcon,
+      value: experience,
+      title: "Опыт",
+      desc: "Шьём мужскую одежду оптом и знаем требования оптовых клиентов.",
+    },
   {
     icon: SpoolIcon,
     value: "100%",
@@ -24,33 +27,47 @@ const PILLARS = [
     title: "Доставка",
     desc: "Отправляем транспортными компаниями по России и странам СНГ.",
   },
-  {
-    icon: PinIcon,
-    value: "Бишкек",
-    title: "Производство",
-    desc: "Швейный цех в Кыргызстане — честная цена напрямую с фабрики.",
-  },
-];
+    {
+      icon: PinIcon,
+      value: "Бишкек",
+      title: "Производство",
+      desc: "Швейный цех в Кыргызстане — честная цена напрямую с фабрики.",
+    },
+  ];
+}
 
-const REVIEWS = [
+type ReviewItem = Pick<Review, "name" | "city" | "text" | "rating">;
+
+const DEFAULT_REVIEWS: ReviewItem[] = [
   {
     text: "Заказывали поло и футболки на пробную партию — качество пошива отличное, размеры в норму. Уже сделали повторный заказ.",
     name: "Алексей",
     city: "Москва",
+    rating: 5,
   },
   {
     text: "Удобно, что можно собрать разные цвета и размеры в одну поставку. Менеджер быстро отвечает в Telegram, прайс прислали сразу.",
     name: "Марина",
     city: "Казань",
+    rating: 5,
   },
   {
     text: "Берём худи и спортивные костюмы регулярно. Цена от цеха ниже рынка, доставка до Екатеринбурга без задержек.",
     name: "Дмитрий",
     city: "Екатеринбург",
+    rating: 5,
   },
 ];
 
-export function TrustBlock() {
+export function TrustBlock({
+  reviews,
+  experienceText,
+}: {
+  reviews?: ReviewItem[];
+  experienceText?: string | null;
+}) {
+  const PILLARS = pillars(experienceText || "5+ лет");
+  const REVIEWS = reviews && reviews.length > 0 ? reviews : DEFAULT_REVIEWS;
   return (
     <section className="container-px py-16 lg:py-24">
       <div className="mb-10 max-w-2xl">
@@ -84,11 +101,11 @@ export function TrustBlock() {
           <span className="hidden text-sm text-muted sm:block">Оптовые клиенты из России и СНГ</span>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
-          {REVIEWS.map((r) => (
-            <figure key={r.name} className="card flex flex-col p-6">
+          {REVIEWS.map((r, i) => (
+            <figure key={`${r.name}-${i}`} className="card flex flex-col p-6">
               <div className="mb-3 flex gap-0.5 text-signal" aria-hidden>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i}>★</span>
+                {Array.from({ length: Math.max(1, Math.min(5, r.rating || 5)) }).map((_, j) => (
+                  <span key={j}>★</span>
                 ))}
               </div>
               <blockquote className="flex-1 text-[15px] leading-relaxed text-ink/85">

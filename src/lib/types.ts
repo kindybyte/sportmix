@@ -70,6 +70,31 @@ export interface Settings {
   delivery_text: string | null;
   about_text: string | null;
   logo_url: string | null;
+  experience_text: string | null;
+}
+
+export type ProductionSection = "step" | "gallery";
+
+export interface ProductionPhoto {
+  id: string;
+  section: ProductionSection;
+  title: string | null;
+  description: string | null;
+  image_url: string | null;
+  sort_order: number;
+  is_visible: boolean;
+  created_at: string;
+}
+
+export interface Review {
+  id: string;
+  name: string;
+  city: string | null;
+  text: string;
+  rating: number;
+  sort_order: number;
+  is_visible: boolean;
+  created_at: string;
 }
 
 export const PRODUCT_STATUS_LABEL: Record<ProductStatus, string> = {

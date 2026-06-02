@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getSettings } from "@/lib/queries";
+import { getProductionPhotos, getSettings } from "@/lib/queries";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
 import { SpoolIcon, ArrowRight, TelegramIcon, CheckIcon } from "@/components/ui/Icons";
 import { telegramLink } from "@/lib/utils";
@@ -16,21 +16,19 @@ export const metadata: Metadata = {
 };
 
 /**
- * Этапы производства. Чтобы добавить реальные фото:
- * 1) положите изображения в папку /public/production/ (например step-1.jpg),
- * 2) укажите путь в поле image, напр. image: "/production/step-1.jpg".
- * Пока image: null — показывается аккуратный плейсхолдер.
+ * Этапы и галерея управляются из админки (/admin/production).
+ * Пока в БД ничего нет — показываются примеры по умолчанию ниже.
  */
-const STEPS: { n: string; title: string; desc: string; image: string | null }[] = [
-  { n: "01", title: "Закупка ткани", desc: "Отбираем качественное полотно: холодок, кулир, футер, трёхнитка.", image: null },
-  { n: "02", title: "Раскрой", desc: "Точный раскрой по лекалам — ровная посадка и минимум брака.", image: null },
-  { n: "03", title: "Пошив", desc: "Швейные линии цеха выполняют тираж в нужном объёме и в срок.", image: null },
-  { n: "04", title: "Контроль качества", desc: "Проверяем швы, размеры и фурнитуру перед упаковкой.", image: null },
-  { n: "05", title: "Упаковка", desc: "Складываем и упаковываем по размерам и цветам — удобно принимать.", image: null },
-  { n: "06", title: "Отгрузка", desc: "Передаём в транспортную компанию и присылаем трек-номер.", image: null },
+const DEFAULT_STEPS: { title: string; desc: string; image: string | null }[] = [
+  { title: "Закупка ткани", desc: "Отбираем качественное полотно: холодок, кулир, футер, трёхнитка.", image: null },
+  { title: "Раскрой", desc: "Точный раскрой по лекалам — ровная посадка и минимум брака.", image: null },
+  { title: "Пошив", desc: "Швейные линии цеха выполняют тираж в нужном объёме и в срок.", image: null },
+  { title: "Контроль качества", desc: "Проверяем швы, размеры и фурнитуру перед упаковкой.", image: null },
+  { title: "Упаковка", desc: "Складываем и упаковываем по размерам и цветам — удобно принимать.", image: null },
+  { title: "Отгрузка", desc: "Передаём в транспортную компанию и присылаем трек-номер.", image: null },
 ];
 
-const GALLERY: { caption: string; image: string | null }[] = [
+const DEFAULT_GALLERY: { caption: string; image: string | null }[] = [
   { caption: "Швейный цех", image: null },
   { caption: "Раскройный стол", image: null },
   { caption: "Готовая продукция", image: null },
@@ -63,8 +61,26 @@ function PhotoTile({
 }
 
 export default async function ProductionPage() {
-  const settings = await getSettings();
+  const [settings, stepPhotos, galleryPhotos] = await Promise.all([
+    getSettings(),
+    getProductionPhotos("step"),
+    getProductionPhotos("gallery"),
+  ]);
   const tg = telegramLink(settings?.telegram_username);
+
+  const steps =
+    stepPhotos.length > 0
+      ? stepPhotos.map((p) => ({
+          title: p.title ?? "",
+          desc: p.description ?? "",
+          image: p.image_url,
+        }))
+      : DEFAULT_STEPS;
+
+  const gallery =
+    galleryPhotos.length > 0
+      ? galleryPhotos.map((p) => ({ caption: p.title ?? "", image: p.image_url }))
+      : DEFAULT_GALLERY;
 
   return (
     <div className="container-px py-12 lg:py-16">
@@ -102,13 +118,15 @@ export default async function ProductionPage() {
           <p className="mt-3 text-muted">От ткани до отгрузки — каждый шаг под контролем.</p>
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((s) => (
-            <article key={s.n} className="card overflow-hidden">
+          {steps.map((s, i) => (
+            <article key={`${s.title}-${i}`} className="card overflow-hidden">
               <PhotoTile src={s.image} caption={s.title} aspect="aspect-[4/3] rounded-none border-0 border-b border-line" />
               <div className="p-5">
-                <span className="font-display text-sm font-bold text-signal">{s.n}</span>
+                <span className="font-display text-sm font-bold text-signal">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3 className="mt-1 font-display text-lg font-semibold">{s.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">{s.desc}</p>
+                {s.desc && <p className="mt-1.5 text-sm leading-relaxed text-muted">{s.desc}</p>}
               </div>
             </article>
           ))}
@@ -122,8 +140,8 @@ export default async function ProductionPage() {
           <h2 className="font-display text-3xl font-bold sm:text-4xl">Цех, упаковка и отгрузка</h2>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {GALLERY.map((g) => (
-            <PhotoTile key={g.caption} src={g.image} caption={g.caption} aspect="aspect-square" />
+          {gallery.map((g, i) => (
+            <PhotoTile key={`${g.caption}-${i}`} src={g.image} caption={g.caption} aspect="aspect-square" />
           ))}
         </div>
       </section>

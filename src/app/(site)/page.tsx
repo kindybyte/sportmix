@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCategories, getNewProducts, getSettings } from "@/lib/queries";
+import { getCategories, getNewProducts, getReviews, getSettings } from "@/lib/queries";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
 import { TrustBlock } from "@/components/site/TrustBlock";
@@ -32,10 +32,11 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const [categories, newProducts, settings] = await Promise.all([
+  const [categories, newProducts, settings, reviews] = await Promise.all([
     getCategories(),
     getNewProducts(8),
     getSettings(),
+    getReviews(),
   ]);
 
   const tg = telegramLink(settings?.telegram_username);
@@ -228,7 +229,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─────────── БЛОК ДОВЕРИЯ + ОТЗЫВЫ ─────────── */}
-      <TrustBlock />
+      <TrustBlock reviews={reviews} experienceText={settings?.experience_text} />
 
       {/* ─────────── ФОРМА: ПОЛУЧИТЬ ОПТОВЫЙ ПРАЙС ─────────── */}
       <PriceFormSection />
