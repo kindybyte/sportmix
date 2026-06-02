@@ -64,7 +64,7 @@ export default async function HowToOrderPage() {
             <TelegramIcon className="h-5 w-5" /> Написать в Telegram
           </a>
         )}
-        <PriceRequestButton className="btn-ghost btn-lg underline-offset-4 hover:underline" />
+        <PriceRequestButton className="btn-signal btn-lg" />
       </div>
 
       {/* FAQ */}

@@ -77,7 +77,7 @@ export default async function HomePage() {
                   Связаться в Telegram
                 </a>
               )}
-              <PriceRequestButton className="btn-ghost btn-lg underline-offset-4 hover:underline" />
+              <PriceRequestButton className="btn-signal btn-lg" />
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted">
