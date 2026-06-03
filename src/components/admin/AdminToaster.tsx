@@ -27,21 +27,25 @@ function ToasterInner() {
 
   const toastKey = params.get("toast");
 
+  // Показываем сообщение и сразу чистим ?toast= из URL
   useEffect(() => {
     if (!toastKey) return;
-    const text = MESSAGES[toastKey] ?? "Готово";
-    setMessage(text);
+    setMessage(MESSAGES[toastKey] ?? "Готово");
 
-    // Убираем ?toast= из URL, не добавляя запись в историю
     const next = new URLSearchParams(params.toString());
     next.delete("toast");
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-
-    const t = setTimeout(() => setMessage(null), 3200);
-    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toastKey]);
+
+  // Автозакрытие — отдельный эффект, привязан к сообщению,
+  // поэтому смена URL его не сбрасывает.
+  useEffect(() => {
+    if (!message) return;
+    const t = setTimeout(() => setMessage(null), 3200);
+    return () => clearTimeout(t);
+  }, [message]);
 
   if (!message) return null;
 
