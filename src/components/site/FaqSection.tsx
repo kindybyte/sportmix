@@ -37,7 +37,24 @@ const FAQ: { q: string; a: string }[] = [
   },
 ];
 
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="group card p-5 transition-colors hover:border-ink/40">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-semibold">
+        {q}
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-signal-soft text-lg leading-none text-signal transition-transform group-open:rotate-45">
+          +
+        </span>
+      </summary>
+      <p className="mt-3 text-[15px] leading-relaxed text-muted">{a}</p>
+    </details>
+  );
+}
+
 export function FaqSection() {
+  const mid = Math.ceil(FAQ.length / 2);
+  const columns = [FAQ.slice(0, mid), FAQ.slice(mid)];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -62,17 +79,13 @@ export function FaqSection() {
         </p>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-2">
-        {FAQ.map((f) => (
-          <details key={f.q} className="group card p-5 transition-colors hover:border-ink/40">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-semibold">
-              {f.q}
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-signal-soft text-lg leading-none text-signal transition-transform group-open:rotate-45">
-                +
-              </span>
-            </summary>
-            <p className="mt-3 text-[15px] leading-relaxed text-muted">{f.a}</p>
-          </details>
+      <div className="grid items-start gap-3 lg:grid-cols-2">
+        {columns.map((col, i) => (
+          <div key={i} className="flex flex-col gap-3">
+            {col.map((f) => (
+              <FaqItem key={f.q} q={f.q} a={f.a} />
+            ))}
+          </div>
         ))}
       </div>
     </section>
