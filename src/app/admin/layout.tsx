@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminToaster } from "@/components/admin/AdminToaster";
 
 export const metadata: Metadata = {
   title: "Админ-панель",
@@ -24,6 +25,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-paper lg:grid lg:grid-cols-[260px_1fr]">
+      <AdminToaster />
       <AdminSidebar email={user.email ?? ""} />
       <div className="min-w-0">
         <main className="px-5 py-6 sm:px-8 lg:py-10">{children}</main>

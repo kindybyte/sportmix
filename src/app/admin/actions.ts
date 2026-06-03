@@ -121,7 +121,7 @@ export async function saveProductAction(formData: FormData) {
   revalidatePath("/admin/products");
   revalidatePath("/catalog");
   revalidatePath("/");
-  redirect("/admin/products");
+  redirect("/admin/products?toast=product-saved");
 }
 
 export async function deleteProductAction(formData: FormData) {
@@ -132,6 +132,7 @@ export async function deleteProductAction(formData: FormData) {
     revalidatePath("/admin/products");
     revalidatePath("/catalog");
   }
+  redirect("/admin/products?toast=product-deleted");
 }
 
 export async function toggleProductVisibilityAction(formData: FormData) {
@@ -143,6 +144,7 @@ export async function toggleProductVisibilityAction(formData: FormData) {
     revalidatePath("/admin/products");
     revalidatePath("/catalog");
   }
+  redirect("/admin/products?toast=visibility");
 }
 
 // ─────────────────────── CATEGORIES ─────────────────
@@ -165,6 +167,7 @@ export async function saveCategoryAction(formData: FormData) {
   revalidatePath("/admin/categories");
   revalidatePath("/catalog");
   revalidatePath("/");
+  redirect("/admin/categories?toast=category-saved");
 }
 
 export async function deleteCategoryAction(formData: FormData) {
@@ -175,6 +178,7 @@ export async function deleteCategoryAction(formData: FormData) {
     revalidatePath("/admin/categories");
     revalidatePath("/catalog");
   }
+  redirect("/admin/categories?toast=category-deleted");
 }
 
 // ─────────────────────── LEADS ──────────────────────
@@ -186,6 +190,7 @@ export async function updateLeadStatusAction(formData: FormData) {
     await sb.from("leads").update({ status }).eq("id", id);
     revalidatePath("/admin/leads");
   }
+  redirect("/admin/leads?toast=lead-updated");
 }
 
 export async function deleteLeadAction(formData: FormData) {
@@ -195,6 +200,7 @@ export async function deleteLeadAction(formData: FormData) {
     await sb.from("leads").delete().eq("id", id);
     revalidatePath("/admin/leads");
   }
+  redirect("/admin/leads?toast=lead-deleted");
 }
 
 // ─────────────────────── SETTINGS ───────────────────
@@ -213,6 +219,7 @@ export async function saveSettingsAction(formData: FormData) {
   };
   await sb.from("settings").upsert(payload, { onConflict: "id" });
   revalidatePath("/", "layout");
+  redirect("/admin/settings?toast=settings-saved");
 }
 
 // ─────────────────────── PRODUCTION PHOTOS ──────────
@@ -236,6 +243,7 @@ export async function saveProductionPhotoAction(formData: FormData) {
   }
   revalidatePath("/admin/production");
   revalidatePath("/production");
+  redirect("/admin/production?toast=photo-saved");
 }
 
 export async function deleteProductionPhotoAction(formData: FormData) {
@@ -246,6 +254,7 @@ export async function deleteProductionPhotoAction(formData: FormData) {
     revalidatePath("/admin/production");
     revalidatePath("/production");
   }
+  redirect("/admin/production?toast=photo-deleted");
 }
 
 // ─────────────────────── REVIEWS ────────────────────
@@ -272,6 +281,7 @@ export async function saveReviewAction(formData: FormData) {
   }
   revalidatePath("/admin/reviews");
   revalidatePath("/");
+  redirect("/admin/reviews?toast=review-saved");
 }
 
 export async function deleteReviewAction(formData: FormData) {
@@ -282,4 +292,5 @@ export async function deleteReviewAction(formData: FormData) {
     revalidatePath("/admin/reviews");
     revalidatePath("/");
   }
+  redirect("/admin/reviews?toast=review-deleted");
 }
