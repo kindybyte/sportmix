@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/catalog/ProductCard";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
 import { TrustBlock } from "@/components/site/TrustBlock";
 import { PriceFormSection } from "@/components/site/PriceFormSection";
+import { FaqSection } from "@/components/site/FaqSection";
 import {
   ArrowRight,
   TelegramIcon,
@@ -233,6 +234,9 @@ export default async function HomePage() {
 
       {/* ─────────── ФОРМА: ПОЛУЧИТЬ ОПТОВЫЙ ПРАЙС ─────────── */}
       <PriceFormSection />
+
+      {/* ─────────── FAQ ─────────── */}
+      <FaqSection />
 
       {/* ─────────── КОНТАКТЫ CTA ─────────── */}
       <section className="container-px py-16 lg:py-24">
