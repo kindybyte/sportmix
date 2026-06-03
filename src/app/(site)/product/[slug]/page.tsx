@@ -162,7 +162,7 @@ export default async function ProductPage({
           )}
           {product.sizes.length > 0 && (
             <div className="mt-4">
-              <span className="label">Размеры</span>
+              <span className="label">Размерный ряд</span>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s) => (
                   <span key={s} className="chip">{s}</span>
@@ -208,7 +208,7 @@ export default async function ProductPage({
             <h2 className="font-display text-lg font-bold">Характеристики</h2>
             <dl className="mt-3">
               <Row label="Ткань" value={product.fabric} />
-              <Row label="Размеры" value={product.sizes.join(", ")} />
+              <Row label="Размерный ряд" value={product.sizes.join(", ")} />
               <Row label="Цвета" value={product.colors.join(", ")} />
               <Row label="Пол" value={product.gender} />
               <Row label="Сезон" value={product.season} />

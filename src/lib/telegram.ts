@@ -36,8 +36,8 @@ export function buildLeadText(lead: LeadMessage): string {
     lines.push(`<b>Товар:</b> ${esc(lead.product_title)}`);
     if (lead.product_article) lines.push(`<b>Артикул:</b> ${esc(lead.product_article)}`);
     if (lead.color) lines.push(`<b>Цвет:</b> ${esc(lead.color)}`);
-    if (lead.size) lines.push(`<b>Размеры:</b> ${esc(lead.size)}`);
-    if (lead.quantity) lines.push(`<b>Количество:</b> ${esc(lead.quantity)}`);
+    if (lead.size) lines.push(`<b>Размерный ряд:</b> ${esc(lead.size)}`);
+    if (lead.quantity) lines.push(`<b>Количество (пачек):</b> ${esc(lead.quantity)}`);
     lines.push("");
   }
 

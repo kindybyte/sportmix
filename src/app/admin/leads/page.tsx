@@ -78,8 +78,8 @@ export default async function AdminLeadsPage({
                   {lead.product_title && <Field label="Товар" value={lead.product_title} />}
                   {lead.product_article && <Field label="Артикул" value={lead.product_article} />}
                   {lead.color && <Field label="Цвет" value={lead.color} />}
-                  {lead.size && <Field label="Размер" value={lead.size} />}
-                  {lead.quantity && <Field label="Количество" value={lead.quantity} />}
+                  {lead.size && <Field label="Размерный ряд" value={lead.size} />}
+                  {lead.quantity && <Field label="Кол-во (пачек)" value={lead.quantity} />}
                   {lead.city && <Field label="Город" value={lead.city} />}
                   <Field label="Контакт" value={lead.contact} />
                 </dl>

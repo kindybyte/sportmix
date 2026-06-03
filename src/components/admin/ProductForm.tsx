@@ -169,9 +169,11 @@ export function ProductForm({
             <input id="season" name="season" defaultValue={product?.season ?? ""} className="field" placeholder="Весна / Лето" />
           </div>
           <div>
-            <label className="label" htmlFor="sizes">Размеры</label>
-            <input id="sizes" name="sizes" defaultValue={product?.sizes?.join(", ") ?? ""} className="field" placeholder="46, 48, 50, 52, 54" />
-            <p className="mt-1 text-xs text-muted">Через запятую</p>
+            <label className="label" htmlFor="sizes">Размерные ряды (пачки)</label>
+            <input id="sizes" name="sizes" defaultValue={product?.sizes?.join(", ") ?? ""} className="field" placeholder="46-54, 52-60" />
+            <p className="mt-1 text-xs text-muted">
+              Указывайте ряды через запятую, например «46-54, 52-60». В заявке клиент выберет ряд (пачку).
+            </p>
           </div>
           <div>
             <label className="label" htmlFor="colors">Цвета</label>

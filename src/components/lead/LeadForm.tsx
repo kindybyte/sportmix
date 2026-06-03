@@ -11,9 +11,23 @@ interface LeadFormProps {
   onSuccess?: () => void;
 }
 
+/**
+ * Размерные ряды (пачки). Если у товара уже заданы диапазоны
+ * (например «46-54»), берём их как есть. Если перечислены отдельные
+ * размеры — собираем один полный ряд min–max.
+ */
+function buildSizeRanges(sizes: string[] = []): string[] {
+  const clean = sizes.map((s) => s.trim()).filter(Boolean);
+  if (!clean.length) return [];
+  if (clean.some((s) => /[-–—]/.test(s))) return clean;
+  return clean.length > 1 ? [`${clean[0]}–${clean[clean.length - 1]}`] : clean;
+}
+
 export function LeadForm({ product, type = "product", cartSummary, onSuccess }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const sizeRanges = buildSizeRanges(product?.sizes);
+  const colorOptions = product?.colors ?? [];
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -104,47 +118,47 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
       </div>
 
       {type === "product" && (
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label className="label" htmlFor="lf-color">Цвет</label>
-            <input
-              id="lf-color"
-              name="color"
-              list="lf-colors"
-              maxLength={120}
-              className="field"
-              placeholder="Чёрный"
-            />
-            {product?.colors?.length ? (
-              <datalist id="lf-colors">
-                {product.colors.map((c) => (
-                  <option key={c} value={c} />
-                ))}
-              </datalist>
-            ) : null}
+        <div className="space-y-3">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label className="label" htmlFor="lf-color">Цвет</label>
+              {colorOptions.length ? (
+                <select id="lf-color" name="color" defaultValue="" className="field">
+                  <option value="">Выберите цвет</option>
+                  {colorOptions.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              ) : (
+                <input id="lf-color" name="color" maxLength={120} className="field" placeholder="Чёрный" />
+              )}
+            </div>
+            <div>
+              <label className="label" htmlFor="lf-size">Размерный ряд</label>
+              {sizeRanges.length ? (
+                <select
+                  id="lf-size"
+                  name="size"
+                  defaultValue={sizeRanges.length === 1 ? sizeRanges[0] : ""}
+                  className="field"
+                >
+                  {sizeRanges.length > 1 && <option value="">Выберите ряд</option>}
+                  {sizeRanges.map((r) => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </select>
+              ) : (
+                <input id="lf-size" name="size" maxLength={120} className="field" placeholder="46–54" />
+              )}
+            </div>
+            <div>
+              <label className="label" htmlFor="lf-qty">Кол-во, пачек</label>
+              <input id="lf-qty" name="quantity" maxLength={60} className="field" placeholder="10" />
+            </div>
           </div>
-          <div>
-            <label className="label" htmlFor="lf-size">Размер</label>
-            <input
-              id="lf-size"
-              name="size"
-              list="lf-sizes"
-              maxLength={120}
-              className="field"
-              placeholder="46–54"
-            />
-            {product?.sizes?.length ? (
-              <datalist id="lf-sizes">
-                {product.sizes.map((s) => (
-                  <option key={s} value={s} />
-                ))}
-              </datalist>
-            ) : null}
-          </div>
-          <div>
-            <label className="label" htmlFor="lf-qty">Кол-во, шт</label>
-            <input id="lf-qty" name="quantity" maxLength={60} className="field" placeholder="100" />
-          </div>
+          <p className="text-xs text-muted">
+            Продаём пачками: в одной пачке — полный размерный ряд. Количество указывайте в пачках.
+          </p>
         </div>
       )}
 
