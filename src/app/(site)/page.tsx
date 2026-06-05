@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getCategories, getNewProducts, getReviews, getSettings } from "@/lib/queries";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
@@ -90,29 +91,54 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Карточка-витрина */}
+          {/* Витрина: фото модели (из настроек) или баннер по умолчанию */}
           <div className="relative animate-fade-up [animation-delay:120ms]">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-ink to-[#2a2620] text-paper shadow-lift">
-              <div className="tape absolute inset-x-0 top-0 h-3 opacity-30" />
-              <div className="flex h-full flex-col justify-between p-8">
-                <div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-signal">
-                    Direct from factory
-                  </span>
-                  <p className="mt-4 font-display text-3xl font-bold leading-tight">
-                    Шьём оптом.<br />Отправляем в Россию.
-                  </p>
-                </div>
-                <ul className="space-y-3 text-sm text-paper/80">
-                  {["Холодок, кулир, футер, трёхнитка", "Размерный ряд 44–60", "Любые цвета под партию", "Образцы и брендирование"].map((t) => (
-                    <li key={t} className="flex items-center gap-3">
-                      <span className="grid h-6 w-6 place-items-center rounded-full bg-signal/20 text-signal">✓</span>
+            {settings?.hero_image_url ? (
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line shadow-lift">
+                <Image
+                  src={settings.hero_image_url}
+                  alt="Мужская одежда оптом — швейный цех SportMix"
+                  fill
+                  priority
+                  sizes="(max-width:1024px) 100vw, 45vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent" />
+                <span className="absolute left-5 top-5 rounded-full bg-ink/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-signal backdrop-blur">
+                  Direct from factory
+                </span>
+                <ul className="absolute inset-x-5 bottom-5 grid grid-cols-2 gap-2 text-xs font-medium text-paper">
+                  {["Холодок, кулир, футер", "Размерный ряд 44–60", "Любые цвета", "Брендирование"].map((t) => (
+                    <li key={t} className="flex items-center gap-2 rounded-lg bg-ink/40 px-2.5 py-1.5 backdrop-blur">
+                      <span className="text-signal">✓</span>
                       {t}
                     </li>
                   ))}
                 </ul>
               </div>
-            </div>
+            ) : (
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-ink to-[#2a2620] text-paper shadow-lift">
+                <div className="tape absolute inset-x-0 top-0 h-3 opacity-30" />
+                <div className="flex h-full flex-col justify-between p-8">
+                  <div>
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-signal">
+                      Direct from factory
+                    </span>
+                    <p className="mt-4 font-display text-3xl font-bold leading-tight">
+                      Шьём оптом.<br />Отправляем в Россию.
+                    </p>
+                  </div>
+                  <ul className="space-y-3 text-sm text-paper/80">
+                    {["Холодок, кулир, футер, трёхнитка", "Размерный ряд 44–60", "Любые цвета под партию", "Образцы и брендирование"].map((t) => (
+                      <li key={t} className="flex items-center gap-3">
+                        <span className="grid h-6 w-6 place-items-center rounded-full bg-signal/20 text-signal">✓</span>
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

@@ -216,6 +216,7 @@ export async function saveSettingsAction(formData: FormData) {
     about_text: str(formData.get("about_text")),
     logo_url: str(formData.get("logo_url")),
     experience_text: str(formData.get("experience_text")),
+    hero_image_url: str(formData.get("hero_image_url")),
   };
   await sb.from("settings").upsert(payload, { onConflict: "id" });
   revalidatePath("/", "layout");

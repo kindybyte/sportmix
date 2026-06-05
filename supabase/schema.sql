@@ -244,6 +244,8 @@ create index if not exists reviews_sort_idx on public.reviews(sort_order);
 
 alter table public.settings
   add column if not exists experience_text text default '5+ лет';
+alter table public.settings
+  add column if not exists hero_image_url text;
 
 alter table public.production_photos enable row level security;
 alter table public.reviews           enable row level security;

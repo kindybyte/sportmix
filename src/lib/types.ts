@@ -71,6 +71,7 @@ export interface Settings {
   about_text: string | null;
   logo_url: string | null;
   experience_text: string | null;
+  hero_image_url: string | null;
 }
 
 export type ProductionSection = "step" | "gallery";

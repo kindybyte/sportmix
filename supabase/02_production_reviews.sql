@@ -39,6 +39,10 @@ create index if not exists reviews_sort_idx on public.reviews(sort_order);
 alter table public.settings
   add column if not exists experience_text text default '5+ лет';
 
+-- Фото модели для первого экрана главной страницы
+alter table public.settings
+  add column if not exists hero_image_url text;
+
 -- ════════════════════════════════════════════════════════════════
 -- RLS
 -- ════════════════════════════════════════════════════════════════

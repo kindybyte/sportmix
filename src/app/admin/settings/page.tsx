@@ -2,6 +2,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import type { Settings } from "@/lib/types";
 import { saveSettingsAction } from "@/app/admin/actions";
 import { LogoUploadField } from "@/components/admin/LogoUploadField";
+import { ImageField } from "@/components/admin/ImageField";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,17 @@ export default async function AdminSettingsPage() {
               <p className="mt-1 text-xs text-muted">Показывается на главной в блоке «Почему нам доверяют».</p>
             </div>
             <LogoUploadField initialUrl={s?.logo_url ?? null} />
+            <div className="border-t border-line pt-4">
+              <ImageField
+                name="hero_image_url"
+                label="Фото на главной (модель)"
+                initialUrl={s?.hero_image_url ?? null}
+                folder="hero"
+              />
+              <p className="mt-1 text-xs text-muted">
+                Показывается в первом экране справа. Лучше вертикальное фото (например 4:5). Если не загружено — показывается стандартный баннер.
+              </p>
+            </div>
           </div>
         </section>
 
