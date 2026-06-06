@@ -17,6 +17,7 @@ export default async function SiteLayout({
       <Header
         companyName={settings?.company_name ?? "SportMix"}
         whatsappNumber={settings?.whatsapp_number ?? null}
+        logoUrl={settings?.logo_url ?? null}
       />
       <main className="flex-1">{children}</main>
       <Footer settings={settings} />

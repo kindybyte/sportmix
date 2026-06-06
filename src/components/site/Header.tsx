@@ -24,9 +24,11 @@ const NAV = [
 export function Header({
   companyName,
   whatsappNumber,
+  logoUrl,
 }: {
   companyName: string;
   whatsappNumber: string | null;
+  logoUrl?: string | null;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -36,7 +38,7 @@ export function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-paper/85 backdrop-blur-md">
       <div className="container-px flex h-16 items-center justify-between gap-4 lg:h-[72px]">
-        <Logo name={companyName} />
+        <Logo name={companyName} imageUrl={logoUrl} />
 
         <nav className="hidden items-center gap-1 lg:flex">
           {NAV.map((item) => {
