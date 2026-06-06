@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getCategories, getNewProducts, getReviews, getSettings } from "@/lib/queries";
+import { getNewProducts, getReviews, getSettings } from "@/lib/queries";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { PriceRequestButton } from "@/components/lead/PriceRequestButton";
 import { TrustBlock } from "@/components/site/TrustBlock";
@@ -34,8 +34,7 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const [categories, newProducts, settings, reviews] = await Promise.all([
-    getCategories(),
+  const [newProducts, settings, reviews] = await Promise.all([
     getNewProducts(8),
     getSettings(),
     getReviews(),
@@ -173,54 +172,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─────────── КАТЕГОРИИ ─────────── */}
-      <section className="container-px py-4 lg:py-8">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <span className="eyebrow mb-3">Ассортимент</span>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">Популярные категории</h2>
-          </div>
-          <Link href="/catalog" className="btn btn-outline btn-md">
-            Весь каталог <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-          {categories.map((c, i) => (
-            <Link
-              key={c.id}
-              href={`/catalog?category=${c.slug}`}
-              className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-2xl border border-line bg-panel p-4 transition-all hover:-translate-y-1 hover:border-ink hover:shadow-card"
-            >
-              <span className="font-display text-3xl font-bold text-line transition-colors group-hover:text-signal">
-                0{i + 1}
-              </span>
-              <span className="font-display text-sm font-semibold leading-tight">{c.title}</span>
-            </Link>
-          ))}
-          <Link
-            href="/catalog?sort=new"
-            className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-2xl bg-ink p-4 text-paper transition-all hover:-translate-y-1 hover:bg-signal hover:text-white"
-          >
-            <span className="font-display text-3xl font-bold text-paper/30">★</span>
-            <span className="font-display text-sm font-semibold leading-tight">Новинки</span>
-          </Link>
-        </div>
-      </section>
-
-      {/* ─────────── НОВЫЕ ТОВАРЫ ─────────── */}
+      {/* ─────────── АССОРТИМЕНТ ─────────── */}
       {newProducts.length > 0 && (
         <section className="container-px py-16 lg:py-24">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="eyebrow mb-3">Свежие модели</span>
-              <h2 className="font-display text-3xl font-bold sm:text-4xl">Новинки каталога</h2>
+              <span className="eyebrow mb-3">Каталог SportMix</span>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl">Ассортимент</h2>
             </div>
             <Link href="/catalog" className="btn btn-outline btn-md">
               Открыть каталог <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {newProducts.slice(0, 4).map((p) => (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {newProducts.slice(0, 8).map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
