@@ -28,6 +28,7 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [colorQty, setColorQty] = useState<Record<string, string>>({});
   const sizeRanges = buildSizeRanges(product?.sizes);
   const colorOptions = product?.colors ?? [];
 
@@ -35,6 +36,18 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
     setSelectedColors((prev) =>
       prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
     );
+    setColorQty((prev) => {
+      if (prev[color] !== undefined) {
+        const next = { ...prev };
+        delete next[color];
+        return next;
+      }
+      return { ...prev, [color]: "" };
+    });
+  }
+
+  function setQty(color: string, value: string) {
+    setColorQty((prev) => ({ ...prev, [color]: value.replace(/[^\d]/g, "") }));
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,15 +57,24 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+
+    // Цвет и количество: при выборе цветов чипами — разбивка по цветам
+    const colorValue = colorOptions.length
+      ? selectedColors.join(", ")
+      : String(fd.get("color") ?? "");
+    const quantityValue = colorOptions.length
+      ? selectedColors
+          .map((c) => `${c} — ${(colorQty[c] || "").trim() || "?"} пачек`)
+          .join(", ")
+      : String(fd.get("quantity") ?? "");
+
     const payload: Record<string, string> = {
       client_name: String(fd.get("client_name") ?? ""),
       city: String(fd.get("city") ?? ""),
       contact: String(fd.get("contact") ?? ""),
-      color: colorOptions.length
-        ? selectedColors.join(", ")
-        : String(fd.get("color") ?? ""),
+      color: colorValue,
       size: String(fd.get("size") ?? ""),
-      quantity: String(fd.get("quantity") ?? ""),
+      quantity: quantityValue,
       comment: String(fd.get("comment") ?? ""),
       website: String(fd.get("website") ?? ""), // honeypot
       type,
@@ -162,7 +184,28 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
             )}
           </div>
 
-          {/* Размерный ряд + количество */}
+          {/* Количество по каждому выбранному цвету (в пачках) */}
+          {colorOptions.length > 0 && selectedColors.length > 0 && (
+            <div className="space-y-2 rounded-xl border border-line bg-white p-3">
+              <span className="label mb-1 block">Количество по цветам (в пачках)</span>
+              {selectedColors.map((c) => (
+                <div key={c} className="flex items-center gap-3">
+                  <span className="flex-1 text-sm font-medium">{c}</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={colorQty[c] ?? ""}
+                    onChange={(e) => setQty(c, e.target.value)}
+                    className="field max-w-[110px] py-2 text-center"
+                    placeholder="10"
+                  />
+                  <span className="w-12 text-sm text-muted">пачек</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Размерный ряд + (для товаров без цветов) количество */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="label" htmlFor="lf-size">Размерный ряд</label>
@@ -182,14 +225,16 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
                 <input id="lf-size" name="size" maxLength={120} className="field" placeholder="46–54" />
               )}
             </div>
-            <div>
-              <label className="label" htmlFor="lf-qty">Кол-во, пачек</label>
-              <input id="lf-qty" name="quantity" maxLength={60} className="field" placeholder="10" />
-            </div>
+            {colorOptions.length === 0 && (
+              <div>
+                <label className="label" htmlFor="lf-qty">Кол-во, пачек</label>
+                <input id="lf-qty" name="quantity" maxLength={60} className="field" placeholder="10" />
+              </div>
+            )}
           </div>
 
           <p className="text-xs text-muted">
-            Продаём пачками: в одной пачке — полный размерный ряд. Количество указывайте в пачках.
+            Продаём пачками: в одной пачке — полный размерный ряд. Количество указывайте в пачках по каждому цвету.
           </p>
         </div>
       )}
