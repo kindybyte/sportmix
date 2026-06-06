@@ -6,14 +6,12 @@ import { ProductCard } from "./ProductCard";
 import { SearchIcon, FilterIcon, CloseIcon } from "@/components/ui/Icons";
 import { cn } from "@/lib/utils";
 
-type SortKey = "new" | "price-asc" | "price-desc" | "popular" | "in-stock";
+type SortKey = "new" | "popular" | "in-stock";
 
 const SORTS: { key: SortKey; label: string }[] = [
   { key: "new", label: "Новинки" },
   { key: "popular", label: "Популярные" },
   { key: "in-stock", label: "Сначала в наличии" },
-  { key: "price-asc", label: "Цена: по возрастанию" },
-  { key: "price-desc", label: "Цена: по убыванию" },
 ];
 
 const STATUS_OPTIONS: { key: ProductStatus; label: string }[] = [
@@ -76,12 +74,6 @@ export function CatalogView({
     if (status) list = list.filter((p) => p.status === status);
 
     switch (sort) {
-      case "price-asc":
-        list.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
-        break;
-      case "price-desc":
-        list.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
-        break;
       case "popular":
         list.sort((a, b) => Number(b.is_popular) - Number(a.is_popular));
         break;

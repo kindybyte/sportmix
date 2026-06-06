@@ -83,7 +83,7 @@ export default function FavoritesPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <button onClick={() => setOpen(true)} className="btn btn-signal btn-lg">
               <TelegramIcon className="h-5 w-5" />
-              Отправить общую заявку ({items.length})
+              Запросить цены по списку ({items.length})
             </button>
             <Link href="/catalog" className="btn btn-outline btn-lg">
               Добавить ещё <ArrowRight className="h-5 w-5" />

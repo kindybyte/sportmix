@@ -7,7 +7,7 @@ import {
   getSettings,
 } from "@/lib/queries";
 import { PRODUCT_STATUS_LABEL } from "@/lib/types";
-import { formatPrice, siteUrl } from "@/lib/utils";
+import { siteUrl } from "@/lib/utils";
 import { Gallery } from "@/components/product/Gallery";
 import { CopyLinkButton } from "@/components/product/CopyLinkButton";
 import { LeadButton } from "@/components/lead/LeadButton";
@@ -74,17 +74,6 @@ export default async function ProductPage({
     description: product.description ?? undefined,
     image: images.length ? images : undefined,
     brand: { "@type": "Brand", name: settings?.company_name ?? "SportMix" },
-    offers: product.price
-      ? {
-          "@type": "Offer",
-          price: product.price,
-          priceCurrency: "RUB",
-          availability:
-            product.status === "in_stock"
-              ? "https://schema.org/InStock"
-              : "https://schema.org/PreOrder",
-        }
-      : undefined,
   };
 
   return (
@@ -136,17 +125,22 @@ export default async function ProductPage({
           </div>
 
           {/* Цена */}
-          <div className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-2 rounded-2xl border border-line bg-panel p-5">
-            <div>
-              <span className="block text-xs text-muted">Оптовая цена</span>
-              <span className="font-display text-3xl font-bold">{formatPrice(product.price)}</span>
-            </div>
-            {product.min_order_quantity ? (
+          <div className="mt-6 rounded-2xl border border-line bg-panel p-5">
+            <div className="flex flex-wrap items-end gap-x-6 gap-y-2">
               <div>
-                <span className="block text-xs text-muted">Минимальная партия</span>
-                <span className="font-display text-xl font-semibold">от {product.min_order_quantity} шт</span>
+                <span className="block text-xs text-muted">Оптовая цена</span>
+                <span className="font-display text-2xl font-bold sm:text-3xl">Цена по запросу</span>
               </div>
-            ) : null}
+              {product.min_order_quantity ? (
+                <div>
+                  <span className="block text-xs text-muted">Минимальная партия</span>
+                  <span className="font-display text-xl font-semibold">от {product.min_order_quantity} шт</span>
+                </div>
+              ) : null}
+            </div>
+            <p className="mt-3 text-sm text-muted">
+              Пришлём актуальную оптовую цену и рассчитаем по объёму партии — оставьте заявку или запросите прайс.
+            </p>
           </div>
 
           {/* Цвета и размеры */}
@@ -178,7 +172,7 @@ export default async function ProductPage({
               className="btn-signal btn-lg sm:col-span-2"
             >
               <TelegramIcon className="h-5 w-5" />
-              Отправить заявку в Telegram
+              Запросить цену и наличие
             </LeadButton>
             <FavoriteButton
               variant="full"

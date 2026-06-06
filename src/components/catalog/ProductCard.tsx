@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Product } from "@/lib/types";
-import { formatPrice } from "@/lib/utils";
 import { ProductImage } from "@/components/ui/ProductImage";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { FavoriteButton } from "@/components/favorites/FavoriteButton";
@@ -87,9 +86,9 @@ export function ProductCard({ product }: { product: Product }) {
 
         <div className="mt-auto flex flex-col gap-2.5 pt-2 sm:flex-row sm:items-end sm:justify-between">
           <div className="min-w-0">
-            <span className="block text-[11px] text-muted">Опт. цена</span>
-            <span className="font-display text-base font-bold leading-tight sm:text-lg">
-              {formatPrice(product.price)}
+            <span className="block text-[11px] text-muted">Оптом</span>
+            <span className="font-display text-sm font-bold leading-tight">
+              Цена по запросу
             </span>
           </div>
           <Link

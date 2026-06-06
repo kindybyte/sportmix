@@ -196,8 +196,9 @@ export function ProductForm({
         <h2 className="font-display text-lg font-bold">Цена и наличие</h2>
         <div className="mt-5 grid gap-5 sm:grid-cols-3">
           <div>
-            <label className="label" htmlFor="price">Оптовая цена, ₽</label>
-            <input id="price" name="price" inputMode="numeric" defaultValue={product?.price ?? ""} className="field" placeholder="пусто = «по запросу»" />
+            <label className="label" htmlFor="price">Оптовая цена, ₽ (не видна на сайте)</label>
+            <input id="price" name="price" inputMode="numeric" defaultValue={product?.price ?? ""} className="field" placeholder="для ваших заметок" />
+            <p className="mt-1 text-xs text-muted">На сайте цена не показывается — везде «Цена по запросу». Поле для внутреннего учёта.</p>
           </div>
           <div>
             <label className="label" htmlFor="min_order_quantity">Минимальная партия, шт</label>

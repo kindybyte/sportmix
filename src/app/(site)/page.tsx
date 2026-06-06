@@ -73,12 +73,6 @@ export default async function HomePage() {
                 Смотреть каталог
                 <ArrowRight className="h-5 w-5" />
               </Link>
-              {tg && (
-                <a href={tg} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-lg">
-                  <TelegramIcon className="h-5 w-5" />
-                  Связаться в Telegram
-                </a>
-              )}
               <PriceRequestButton className="btn-signal btn-lg" />
             </div>
 
