@@ -13,9 +13,9 @@ export const leadSchema = z.object({
     .trim()
     .min(3, "Укажите Telegram или WhatsApp")
     .max(120, "Слишком длинный контакт"),
-  color: z.string().trim().max(120).optional().or(z.literal("")),
-  size: z.string().trim().max(120).optional().or(z.literal("")),
-  quantity: z.string().trim().max(60).optional().or(z.literal("")),
+  color: z.string().trim().max(400).optional().or(z.literal("")),
+  size: z.string().trim().max(200).optional().or(z.literal("")),
+  quantity: z.string().trim().max(600).optional().or(z.literal("")),
   comment: z.string().trim().max(1000).optional().or(z.literal("")),
   product_id: z.string().uuid().optional().or(z.literal("")),
   product_title: z.string().trim().max(200).optional().or(z.literal("")),
