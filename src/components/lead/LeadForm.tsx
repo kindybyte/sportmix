@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckIcon, TelegramIcon } from "@/components/ui/Icons";
 import type { Product } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface LeadFormProps {
   product?: Pick<Product, "id" | "title" | "article" | "sizes" | "colors">;
@@ -26,8 +27,15 @@ function buildSizeRanges(sizes: string[] = []): string[] {
 export function LeadForm({ product, type = "product", cartSummary, onSuccess }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const sizeRanges = buildSizeRanges(product?.sizes);
   const colorOptions = product?.colors ?? [];
+
+  function toggleColor(color: string) {
+    setSelectedColors((prev) =>
+      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,7 +48,9 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
       client_name: String(fd.get("client_name") ?? ""),
       city: String(fd.get("city") ?? ""),
       contact: String(fd.get("contact") ?? ""),
-      color: String(fd.get("color") ?? ""),
+      color: colorOptions.length
+        ? selectedColors.join(", ")
+        : String(fd.get("color") ?? ""),
       size: String(fd.get("size") ?? ""),
       quantity: String(fd.get("quantity") ?? ""),
       comment: String(fd.get("comment") ?? ""),
@@ -118,21 +128,42 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
       </div>
 
       {type === "product" && (
-        <div className="space-y-3">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label className="label" htmlFor="lf-color">Цвет</label>
-              {colorOptions.length ? (
-                <select id="lf-color" name="color" defaultValue="" className="field">
-                  <option value="">Выберите цвет</option>
-                  {colorOptions.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              ) : (
-                <input id="lf-color" name="color" maxLength={120} className="field" placeholder="Чёрный" />
+        <div className="space-y-4">
+          {/* Цвета — можно выбрать несколько */}
+          <div>
+            <label className="label">
+              Цвет
+              {colorOptions.length > 0 && (
+                <span className="ml-1 font-normal text-muted">
+                  · можно несколько{selectedColors.length ? ` (выбрано ${selectedColors.length})` : ""}
+                </span>
               )}
-            </div>
+            </label>
+            {colorOptions.length ? (
+              <div className="flex flex-wrap gap-2">
+                {colorOptions.map((c) => {
+                  const active = selectedColors.includes(c);
+                  return (
+                    <button
+                      type="button"
+                      key={c}
+                      onClick={() => toggleColor(c)}
+                      aria-pressed={active}
+                      className={cn("chip", active && "chip-active")}
+                    >
+                      {active && <CheckIcon className="h-3.5 w-3.5" />}
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <input id="lf-color" name="color" maxLength={200} className="field" placeholder="Белый, чёрный…" />
+            )}
+          </div>
+
+          {/* Размерный ряд + количество */}
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="label" htmlFor="lf-size">Размерный ряд</label>
               {sizeRanges.length ? (
@@ -156,6 +187,7 @@ export function LeadForm({ product, type = "product", cartSummary, onSuccess }: 
               <input id="lf-qty" name="quantity" maxLength={60} className="field" placeholder="10" />
             </div>
           </div>
+
           <p className="text-xs text-muted">
             Продаём пачками: в одной пачке — полный размерный ряд. Количество указывайте в пачках.
           </p>
